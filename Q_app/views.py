@@ -23,7 +23,7 @@ from django.http import HttpRequest
 
 
 def sqlconn():
-    conn = sql.connect(user='root', passwd='root', db='marketing')
+    conn = sql.connect(user='bcguser',passwd='bcg@1234',db='marketing',host='172.31.87.87')
     cur = conn.cursor()
     return cur, conn
 
