@@ -453,23 +453,23 @@ if request.method=="POST":
         parentValue = request.POST.get('parentValue')
         dependValue = request.POST.get('dependValue')
 
-        head = ['q_app_user_report.id', 'clientname', 'q_app_user_report.campaign_name', 'date', 'no_of_impressions', 'no_of_clicks', 'no_of_sessions', 'cpm', 'cpc', 'cost_per_session', 'total_cpm', 'total_cpc', 'total_cps', 'total_cost', 'q_app_user_report.ctr', 'clientid_id']
+        head = [' Q_app_user_report.id', 'clientname', ' Q_app_user_report.campaign_name', 'date', 'no_of_impressions', 'no_of_clicks', 'no_of_sessions', 'cpm', 'cpc', 'cost_per_session', 'total_cpm', 'total_cpc', 'total_cps', 'total_cost', ' Q_app_user_report.ctr', 'clientid_id']
         #print(parentValue,dependValue)
         print(datef,datet)
         if (datef is not None and datef != '') and (datet is not None and datet != ''):
             date_q=" and (date >= '{}' and date <='{}');".format(datef,datet)
             if parentValue == 'all' and dependValue is None:
-                q = 'select q_app_user_report.id,q_app_user_report.clientname,  q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,q_app_user_report.ctr,total_cost,start_date,end_date from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name order by date desc;'
+                q = 'select  Q_app_user_report.id, Q_app_user_report.clientname,   Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps, Q_app_user_report.ctr,total_cost,start_date,end_date from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name order by date desc;'
             elif parentValue != 'all' and (dependValue=='' or dependValue is None):
 
         #queryset = user_report.objects.filter(date__range=[datef, datet])
         else:
             camp_name = None
             if parentValue == 'all' and dependValue is None:
-                q = 'select q_app_user_report.id,q_app_user_report.clientname,  q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,q_app_user_report.ctr,total_cost,start_date,end_date from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name order by date desc;'
+                q = 'select  Q_app_user_report.id, Q_app_user_report.clientname,   Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps, Q_app_user_report.ctr,total_cost,start_date,end_date from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name order by date desc;'
             elif parentValue != 'all' and (dependValue=='' or dependValue is None):
                 #print('comening')
-                q1="select campaign_name,selected_col from q_app_requirements where deptid_id = {}".format(parentValue)
+                q1="select campaign_name,selected_col from  Q_app_requirements where deptid_id = {}".format(parentValue)
                 cur.execute(q1)
                 res = cur.fetchone()
                 camp=res[0]
@@ -490,10 +490,10 @@ if request.method=="POST":
                     col.insert(-2,'total_cps')
                 
                 #print('col',col)
-                query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name and q_app_requirements.deptid_id ={parentValue} and q_app_requirements.campaign_name={camp} order by date desc;"
+                query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name and  Q_app_requirements.deptid_id ={parentValue} and  Q_app_requirements.campaign_name={camp} order by date desc;"
                 #print('col',query)
                 
-                #q = "select q_app_user_report.id,q_app_user_report.clientname, q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,total_cost,q_app_user_report.ctr,start_date,end_date,planned_cost from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name and q_app_requirements.deptid_id ={} and q_app_requirements.campaign_name='{}' order by date desc;".format(parentValue,dependValue)
+                #q = "select  Q_app_user_report.id, Q_app_user_report.clientname,  Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,total_cost, Q_app_user_report.ctr,start_date,end_date,planned_cost from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name and  Q_app_requirements.deptid_id ={} and  Q_app_requirements.campaign_name='{}' order by date desc;".format(parentValue,dependValue)
                 
                 cur.execute(query)
                 headers = [i[0] for i in cur.description]
@@ -506,10 +506,10 @@ if request.method=="POST":
                 conn.commit()
                 return render(request,'SAdmin_Reportdata.html',{'data':json.dumps(f_data),'col':json.dumps(headers[1:-3]+['action']),'rd':json.dumps(report),'people':people,'empcontext':empcontext,'status':status(data[0]),'camp_name':camp_name,'planned':pl,'achived':ach,'target':'Hit' if pl!='NOT SET'and ach>=pl else 'Not Hit'})
             else:
-                q1="select selected_col from q_app_requirements where deptid_id = {} and campaign_name = '{}' ".format(parentValue,dependValue)
+                q1="select selected_col from  Q_app_requirements where deptid_id = {} and campaign_name = '{}' ".format(parentValue,dependValue)
                 cur.execute(q1)
                 #col=[]
-                head = ['q_app_user_report.id', 'clientname', 'q_app_user_report.campaign_name', 'date', 'no_of_impressions', 'no_of_clicks', 'no_of_sessions', 'cpm', 'cpc', 'cost_per_session', 'total_cpm', 'total_cpc', 'total_cps', 'total_cost', 'q_app_user_report.ctr', 'clientid_id']
+                head = [' Q_app_user_report.id', 'clientname', ' Q_app_user_report.campaign_name', 'date', 'no_of_impressions', 'no_of_clicks', 'no_of_sessions', 'cpm', 'cpc', 'cost_per_session', 'total_cpm', 'total_cpc', 'total_cps', 'total_cost', ' Q_app_user_report.ctr', 'clientid_id']
                 sel = ast.literal_eval(cur.fetchone()[0])[0]
                 #print('selcol',sel)
                 col=head[:4]
@@ -523,10 +523,10 @@ if request.method=="POST":
                 if 'no_of_sessions' in col:
                     col.insert(-2,'total_cps')
                 #print('col',col)
-                query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name and q_app_requirements.deptid_id ={parentValue} and q_app_requirements.campaign_name='{dependValue}' order by date desc;"
+                query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name and  Q_app_requirements.deptid_id ={parentValue} and  Q_app_requirements.campaign_name='{dependValue}' order by date desc;"
                 #print('col',query)
                 
-                #q = "select q_app_user_report.id,q_app_user_report.clientname, q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,total_cost,q_app_user_report.ctr,start_date,end_date,planned_cost from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name and q_app_requirements.deptid_id ={} and q_app_requirements.campaign_name='{}' order by date desc;".format(parentValue,dependValue)
+                #q = "select  Q_app_user_report.id, Q_app_user_report.clientname,  Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,total_cost, Q_app_user_report.ctr,start_date,end_date,planned_cost from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name and  Q_app_requirements.deptid_id ={} and  Q_app_requirements.campaign_name='{}' order by date desc;".format(parentValue,dependValue)
                 camp_name = dependValue.upper()
                 cur.execute(query)
                 headers = [i[0] for i in cur.description]
@@ -562,7 +562,7 @@ if request.method=="POST":
         #return render(request,'sky.html',{'people':people,'empcontext':empcontext})
         return render(request,'SAdmin_Reportdata.html',{'data':json.dumps(data),'col':json.dumps(headers[1:-2]+['action']),'rd':json.dumps(report),'people':people,'empcontext':empcontext,'camp_name':None})
     else:
-        q = 'select q_app_user_report.id,q_app_user_report.clientname, q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,q_app_user_report.ctr,total_cost,start_date,end_date from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name order by date desc;'
+        q = 'select  Q_app_user_report.id, Q_app_user_report.clientname,  Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps, Q_app_user_report.ctr,total_cost,start_date,end_date from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name order by date desc;'
         cur.execute(q)
         headers = [i[0] for i in cur.description]
         #print(headers)
@@ -581,12 +581,12 @@ if request.method=="POST":
 
 
         if parentValue == 'all' and dependValue is None and date_Presence:
-            query = 'select q_app_user_report.id,q_app_user_report.clientname,  q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,q_app_user_report.ctr,total_cost,start_date,end_date from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name'+date_q+' order by date desc;'
+            query = 'select  Q_app_user_report.id, Q_app_user_report.clientname,   Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps, Q_app_user_report.ctr,total_cost,start_date,end_date from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name'+date_q+' order by date desc;'
         else:
-            query = 'select q_app_user_report.id,q_app_user_report.clientname,  q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps,q_app_user_report.ctr,total_cost,start_date,end_date from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name order by date desc;'
+            query = 'select  Q_app_user_report.id, Q_app_user_report.clientname,   Q_app_user_report.campaign_name,date, no_of_impressions,no_of_clicks,no_of_sessions,cpm,cpc,cost_per_session,total_cpm,total_cpc,total_cps, Q_app_user_report.ctr,total_cost,start_date,end_date from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name order by date desc;'
 
         if  parentValue != 'all' and (dependValue=='' or dependValue is None) and date_Presence:
-            q1="select campaign_name,selected_col from q_app_requirements where deptid_id = {}".format(parentValue)
+            q1="select campaign_name,selected_col from  Q_app_requirements where deptid_id = {}".format(parentValue)
             cur.execute(q1)
             res = cur.fetchone()
             camp=res[0]
@@ -606,11 +606,11 @@ if request.method=="POST":
             if 'no_of_sessions' in col:
                 col.insert(-2,'total_cps')
 
-            query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name and q_app_requirements.deptid_id ={parentValue} and q_app_requirements.campaign_name={camp} "+date_q+f" order by date desc;"
+            query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name and  Q_app_requirements.deptid_id ={parentValue} and  Q_app_requirements.campaign_name={camp} "+date_q+f" order by date desc;"
         
         elif(parentValue != 'all' and (dependValue=='' or dependValue is None)):
             print('p_val:',parentValue)
-            q1="select campaign_name,selected_col from q_app_requirements where deptid_id = {}".format(parentValue)
+            q1="select campaign_name,selected_col from  Q_app_requirements where deptid_id = {}".format(parentValue)
             cur.execute(q1)
             res = cur.fetchone()
             camp=res[0]
@@ -629,9 +629,9 @@ if request.method=="POST":
             col.append('total_cost')
             if 'no_of_sessions' in col:
                 col.insert(-2,'total_cps')
-            query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from q_app_user_report inner join q_app_requirements on clientid_id = q_app_requirements.id where q_app_user_report.campaign_name = q_app_requirements.campaign_name and q_app_requirements.deptid_id ={parentValue} and q_app_requirements.campaign_name={camp} order by date desc;"
+            query = f"select {', '.join(col)} ,start_date,end_date,planned_cost"+f" from  Q_app_user_report inner join  Q_app_requirements on clientid_id =  Q_app_requirements.id where  Q_app_user_report.campaign_name =  Q_app_requirements.campaign_name and  Q_app_requirements.deptid_id ={parentValue} and  Q_app_requirements.campaign_name={camp} order by date desc;"
 
         if parentValue != 'all' and (dependValue!='' or dependValue is not None) and date_Presence:
-            query=f"select selected_col from q_app_requirements where  deptid_id = {parentValue} and campaign_name = '{dependValue}'"+date_q
+            query=f"select selected_col from  Q_app_requirements where  deptid_id = {parentValue} and campaign_name = '{dependValue}'"+date_q
         else:
-            query=f"select selected_col from q_app_requirements where  deptid_id = {parentValue} and campaign_name = '{dependValue}'"
+            query=f"select selected_col from  Q_app_requirements where  deptid_id = {parentValue} and campaign_name = '{dependValue}'"
